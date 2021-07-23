@@ -1,0 +1,170 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>编译安装ngx_brotli模块 | 姚华Blog</title><meta name="keywords" content="运维"><meta name="author" content="姚华,yaohuayaozhihua@outlook.com"><meta name="copyright" content="姚华"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="编译安装ngx_brotli模块为什么开启brotli压缩算法Brotli是一个Jyrki Alakuijala和Zoltán Szabadka开发的开源数据压缩程序库。Brotli基于LZ77算法的一个现代变体、霍夫曼编码和二阶上下文建模。Google软件工程师在2015年9月发布了包含通用无损数据压缩的Brotli增强版本，特别侧重于HTTP压缩。和谷歌的gzip解压缩格式比起来，Brotli">
+<meta property="og:type" content="article">
+<meta property="og:title" content="编译安装ngx_brotli模块">
+<meta property="og:url" content="https://hexo.yhblog.biz/2021/02/27/nginx-new-page-2/index.html">
+<meta property="og:site_name" content="姚华Blog">
+<meta property="og:description" content="编译安装ngx_brotli模块为什么开启brotli压缩算法Brotli是一个Jyrki Alakuijala和Zoltán Szabadka开发的开源数据压缩程序库。Brotli基于LZ77算法的一个现代变体、霍夫曼编码和二阶上下文建模。Google软件工程师在2015年9月发布了包含通用无损数据压缩的Brotli增强版本，特别侧重于HTTP压缩。和谷歌的gzip解压缩格式比起来，Brotli">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg">
+<meta property="article:published_time" content="2021-02-27T20:13:25.630Z">
+<meta property="article:modified_time" content="2021-07-23T02:32:05.000Z">
+<meta property="article:author" content="姚华">
+<meta property="article:tag" content="运维">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://hexo.yhblog.biz/2021/02/27/nginx-new-page-2/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '编译安装ngx_brotli模块',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: true,
+  isToc: true,
+  postUpdate: '2021-07-23 10:32:05'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">30</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">姚华Blog</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">编译安装ngx_brotli模块</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-02-27T20:13:25.630Z" title="发表于 2021-02-28 04:13:25">2021-02-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-07-23T02:32:05.000Z" title="更新于 2021-07-23 10:32:05">2021-07-23</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="编译安装ngx_brotli模块"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="编译安装ngx-brotli模块"><a href="#编译安装ngx-brotli模块" class="headerlink" title="编译安装ngx_brotli模块"></a>编译安装ngx_brotli模块</h1><h2 id="为什么开启brotli压缩算法"><a href="#为什么开启brotli压缩算法" class="headerlink" title="为什么开启brotli压缩算法"></a>为什么开启brotli压缩算法</h2><p>Brotli是一个Jyrki Alakuijala和Zoltán Szabadka开发的开源数据压缩程序库。Brotli基于LZ77算法的一个现代变体、霍夫曼编码和二阶上下文建模。Google软件工程师在2015年9月发布了包含通用无损数据压缩的Brotli增强版本，特别侧重于HTTP压缩。和谷歌的gzip解压缩格式比起来，Brotli能在此基础上将数据在压缩20～25%，也有利于减少CDN的流量。</p>
+<h2 id="操作步骤"><a href="#操作步骤" class="headerlink" title="操作步骤"></a>操作步骤</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/google/ngx_brotli.git</span><br></pre></td></tr></table></figure>
+<h2 id="下载最新的稳定版本nginx"><a href="#下载最新的稳定版本nginx" class="headerlink" title="下载最新的稳定版本nginx"></a>下载最新的稳定版本nginx</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">groupadd www</span><br><span class="line">useradd -g www www</span><br><span class="line">cd nginx-1.18.0</span><br><span class="line">yum install https://extras.getpagespeed.com/release-el7-latest.rpm</span><br><span class="line">yum clean all</span><br><span class="line">yum makecache</span><br><span class="line">yum install -y nginx-module-nbr vim</span><br><span class="line">./configure --user=www --group=www --prefix=/usr/local/nginx --with-http_ssl_module --with-http_stub_status_module --with-http_realip_module --add-module=/root/ngx_brotli --with-threads</span><br><span class="line">make &amp;&amp; make install</span><br><span class="line">cd /opt/ngx_brotli &amp;&amp; git submodule update --init &amp;&amp; cd /opt/nginx</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/src</span><br><span class="line">git clone https://github.com/google/ngx_brotli.git</span><br><span class="line">cd ngx_brotli/</span><br><span class="line">git submodule update --init</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./configure --with-pcre --prefix=/opt/nginx-1.16.0 --user=nginx --group=nginx --with-threads --with-file-aio --with-http_ssl_module --with-http_v2_module --with-http_realip_module --with-http_addition_module --with-http_xslt_module=dynamic --with-http_image_filter_module --with-http_geoip_module=dynamic --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_mp4_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_auth_request_module --with-http_random_index_module --with-http_secure_link_module --with-http_degradation_module --with-http_slice_module --with-http_stub_status_module --without-http_charset_module --with-http_perl_module --with-mail=dynamic --with-mail_ssl_module --with-stream=dynamic --with-stream_ssl_module --with-stream_realip_module --with-stream_geoip_module=dynamic --with-stream_ssl_preread_module --add-module=/usr/src/ngx_brotli</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line"></span><br><span class="line">  .......</span><br><span class="line"></span><br><span class="line">  .......</span><br><span class="line"></span><br><span class="line">  brotli on;</span><br><span class="line"></span><br><span class="line">  brotli_static on;        # for static compression, explained later</span><br><span class="line"></span><br><span class="line">  brotli_comp_level 6;    # this setting can vary from 1-11</span><br><span class="line"></span><br><span class="line">  brotli_types text/xml image/svg+xml application/x-font-ttf image/vnd.microsoft.icon application/x-font-opentype application/json font/eot application/vnd.ms-fontobject application/javascript font/otf application/xml application/xhtml+xml text/javascript  application/x-javascript text/plain application/x-font-truetype application/xml+rss image/x-icon font/opentype text/css image/x-win-bitmap;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  gzip  on;</span><br><span class="line"></span><br><span class="line">  .......</span><br><span class="line"></span><br><span class="line">  .......</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="怎么确认是否已经开启了brotli压缩"><a href="#怎么确认是否已经开启了brotli压缩" class="headerlink" title="怎么确认是否已经开启了brotli压缩"></a>怎么确认是否已经开启了brotli压缩</h2><p>可以打开查看header去查看encoding是否为br，或者也可以通过<a target="_blank" rel="noopener" href="https://tools.keycdn.com/brotli-test">Brotli Test - Verify Brotli Compression Support | KeyCDN Tools</a>这个链接去检测是否已经支持brotli。<br><img src="https://yhblog-1254039996.cos.ap-guangzhou.myqcloud.com/img-blog/1*mkowud-wbYEvBExK5JvUYQ.png" alt="Image for post"></p>
+<h2 id="brotli压缩效率对比-Brotli-vs-Gzip-Compression-How-we-improved-our-latency-by-37-by-Ankit-Jain-AJ-OYOTech-Medium"><a href="#brotli压缩效率对比-Brotli-vs-Gzip-Compression-How-we-improved-our-latency-by-37-by-Ankit-Jain-AJ-OYOTech-Medium" class="headerlink" title="[brotli压缩效率对比](Brotli vs Gzip Compression. How we improved our latency by 37% | by Ankit Jain AJ | OYOTech | Medium)"></a>[brotli压缩效率对比](<a target="_blank" rel="noopener" href="https://medium.com/oyotech/how-brotli-compression-gave-us-37-latency-improvement-14d41e50fee4">Brotli vs Gzip Compression. How we improved our latency by 37% | by Ankit Jain AJ | OYOTech | Medium</a>)</h2><p><img src="https://yhblog-1254039996.cos.ap-guangzhou.myqcloud.com/img-blog/1*j-3dAHj0pu5E1GmtD6eMuw.png" alt="Image for post"></p>
+<center>CSS文件大小减少26％</center>
+
+<p><img src="https://yhblog-1254039996.cos.ap-guangzhou.myqcloud.com/img-blog/1*i3xJiqPfF84H1h2Rt7na9w.png" alt="Image for post"></p>
+<center>Javascript文件大小减少17％</center>
+
+
+<p><img src="https://yhblog-1254039996.cos.ap-guangzhou.myqcloud.com/img-blog/1*_GVXtCwykvrPzclpIcpAsw.png" alt="Image for post"></p>
+<center>总结</center>
+
+<h2 id="设置brotli为高优先级"><a href="#设置brotli为高优先级" class="headerlink" title="设置brotli为高优先级"></a>设置brotli为高优先级</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">server &#123;    ...    </span><br><span class="line">location / &#123;        </span><br><span class="line">   ...        </span><br><span class="line">   proxy_set_header Accept-Encoding &quot;&quot;;        </span><br><span class="line">   ...    </span><br><span class="line"> &#125;    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:yaohuayaozhihua@outlook.com">姚华</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://hexo.yhblog.biz/2021/02/27/nginx-new-page-2/">https://hexo.yhblog.biz/2021/02/27/nginx-new-page-2/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://hexo.yhblog.biz" target="_blank">姚华Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/02/27/new-page-2/"><img class="prev-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">CentOS7安装elasticsearch2.3.3集群</div></div></a></div><div class="next-post pull-right"><a href="/2021/02/27/nginx-new-page-4/"><img class="next-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">nginx信号处理</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85ngx-brotli%E6%A8%A1%E5%9D%97"><span class="toc-number">1.</span> <span class="toc-text">编译安装ngx_brotli模块</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%BC%80%E5%90%AFbrotli%E5%8E%8B%E7%BC%A9%E7%AE%97%E6%B3%95"><span class="toc-number">1.1.</span> <span class="toc-text">为什么开启brotli压缩算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.2.</span> <span class="toc-text">操作步骤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E6%9C%80%E6%96%B0%E7%9A%84%E7%A8%B3%E5%AE%9A%E7%89%88%E6%9C%ACnginx"><span class="toc-number">1.3.</span> <span class="toc-text">下载最新的稳定版本nginx</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%8E%E4%B9%88%E7%A1%AE%E8%AE%A4%E6%98%AF%E5%90%A6%E5%B7%B2%E7%BB%8F%E5%BC%80%E5%90%AF%E4%BA%86brotli%E5%8E%8B%E7%BC%A9"><span class="toc-number">1.4.</span> <span class="toc-text">怎么确认是否已经开启了brotli压缩</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#brotli%E5%8E%8B%E7%BC%A9%E6%95%88%E7%8E%87%E5%AF%B9%E6%AF%94-Brotli-vs-Gzip-Compression-How-we-improved-our-latency-by-37-by-Ankit-Jain-AJ-OYOTech-Medium"><span class="toc-number">1.5.</span> <span class="toc-text">[brotli压缩效率对比](Brotli vs Gzip Compression. How we improved our latency by 37% | by Ankit Jain AJ | OYOTech | Medium)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AEbrotli%E4%B8%BA%E9%AB%98%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-number">1.6.</span> <span class="toc-text">设置brotli为高优先级</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By 姚华</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

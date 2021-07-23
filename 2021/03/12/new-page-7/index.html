@@ -1,0 +1,209 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Centos7安装kubernetes集群 | 姚华Blog</title><meta name="keywords" content="运维"><meta name="author" content="姚华,yaohuayaozhihua@outlook.com"><meta name="copyright" content="姚华"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Centos7安装kubernetes集群参考链接： https:&#x2F;&#x2F;www.kubernetes.org.cn&#x2F;7315.html How to Install Kubernetes on CentOS 7 (Step by Step) (phoenixnap.com)  集群信息集群节点，一个master，两个node 123192.168.31.2 k8s_master192.168.31.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Centos7安装kubernetes集群">
+<meta property="og:url" content="https://hexo.yhblog.biz/2021/03/12/new-page-7/index.html">
+<meta property="og:site_name" content="姚华Blog">
+<meta property="og:description" content="Centos7安装kubernetes集群参考链接： https:&#x2F;&#x2F;www.kubernetes.org.cn&#x2F;7315.html How to Install Kubernetes on CentOS 7 (Step by Step) (phoenixnap.com)  集群信息集群节点，一个master，两个node 123192.168.31.2 k8s_master192.168.31.">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg">
+<meta property="article:published_time" content="2021-03-13T02:48:55.113Z">
+<meta property="article:modified_time" content="2021-07-23T02:32:04.000Z">
+<meta property="article:author" content="姚华">
+<meta property="article:tag" content="运维">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://hexo.yhblog.biz/2021/03/12/new-page-7/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Centos7安装kubernetes集群',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: true,
+  isToc: true,
+  postUpdate: '2021-07-23 10:32:04'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">30</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">姚华Blog</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Centos7安装kubernetes集群</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-03-13T02:48:55.113Z" title="发表于 2021-03-13 10:48:55">2021-03-13</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-07-23T02:32:04.000Z" title="更新于 2021-07-23 10:32:04">2021-07-23</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Centos7安装kubernetes集群"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Centos7安装kubernetes集群"><a href="#Centos7安装kubernetes集群" class="headerlink" title="Centos7安装kubernetes集群"></a>Centos7安装kubernetes集群</h1><h2 id="参考链接："><a href="#参考链接：" class="headerlink" title="参考链接："></a>参考链接：</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.kubernetes.org.cn/7315.html">https://www.kubernetes.org.cn/7315.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://phoenixnap.com/kb/how-to-install-kubernetes-on-centos">How to Install Kubernetes on CentOS 7 (Step by Step) (phoenixnap.com)</a></li>
+</ul>
+<h2 id="集群信息"><a href="#集群信息" class="headerlink" title="集群信息"></a>集群信息</h2><p>集群节点，一个master，两个node</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">192.168.31.2 k8s_master</span><br><span class="line">192.168.31.3 k8s_slave1</span><br><span class="line">192.168.31.4 k8s_slave2</span><br></pre></td></tr></table></figure>
+
+<h2 id="安装步骤"><a href="#安装步骤" class="headerlink" title="安装步骤"></a>安装步骤</h2><h3 id="在所有节点上，禁用selinux"><a href="#在所有节点上，禁用selinux" class="headerlink" title="在所有节点上，禁用selinux"></a>在所有节点上，禁用selinux</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">setenforce 0</span><br><span class="line">sed -i &quot;s/SELINUX=enforcing/SELINUX=disabled/g&quot; /etc/selinux/config</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="在所有节点上，禁用关闭firewalld"><a href="#在所有节点上，禁用关闭firewalld" class="headerlink" title="在所有节点上，禁用关闭firewalld"></a>在所有节点上，禁用关闭firewalld</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop firewalld</span><br><span class="line">systemctl disable firewalld</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="在所有节点上，关闭swap"><a href="#在所有节点上，关闭swap" class="headerlink" title="在所有节点上，关闭swap"></a>在所有节点上，关闭swap</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">swapoff -a</span><br><span class="line">yes | cp /etc/fstab /etc/fstab_bak</span><br><span class="line">cat /etc/fstab_bak |grep -v swap &gt; /etc/fstab</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="更改所有节点上的源为国内阿里源"><a href="#更改所有节点上的源为国内阿里源" class="headerlink" title="更改所有节点上的源为国内阿里源"></a>更改所有节点上的源为国内阿里源</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># 安装wget</span><br><span class="line">yum install wget -y</span><br><span class="line"># 备份</span><br><span class="line">mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup</span><br><span class="line"># 获取阿里云yum源</span><br><span class="line">wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo</span><br><span class="line"># 获取阿里云epel源</span><br><span class="line">wget -O /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo</span><br><span class="line"># 清理缓存并创建新的缓存</span><br><span class="line">yum clean all &amp;&amp; yum makecache</span><br><span class="line"># 系统更新</span><br><span class="line">yum update -y</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="在所有的节点上安装docker"><a href="#在所有的节点上安装docker" class="headerlink" title="在所有的节点上安装docker"></a><strong>在所有的节点上安装docker</strong></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"># 安装 Docker CE</span><br><span class="line"># 设置仓库</span><br><span class="line"># 安装所需包</span><br><span class="line">yum install -y yum-utils \</span><br><span class="line">    device-mapper-persistent-data \</span><br><span class="line">    lvm2</span><br><span class="line"></span><br><span class="line"># 新增 Docker 仓库,速度慢的可以换阿里云的源。</span><br><span class="line">yum-config-manager \</span><br><span class="line">    --add-repo \</span><br><span class="line">    https://download.docker.com/linux/centos/docker-ce.repo</span><br><span class="line"># 阿里云源地址</span><br><span class="line"># http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</span><br><span class="line"></span><br><span class="line"># 安装 Docker CE.</span><br><span class="line">yum install -y containerd.io-1.2.10 \</span><br><span class="line">    docker-ce-19.03.4 \</span><br><span class="line">    docker-ce-cli-19.03.4</span><br><span class="line"></span><br><span class="line"># 启动 Docker 并添加开机启动</span><br><span class="line">systemctl start docker</span><br><span class="line">systemctl enable docker</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="在所有节点上，修改Cgroup-Driver"><a href="#在所有节点上，修改Cgroup-Driver" class="headerlink" title="在所有节点上，修改Cgroup Driver"></a>在所有节点上，修改Cgroup Driver</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">cat &gt; /etc/docker/daemon.json &lt;&lt;EOF</span><br><span class="line">&#123;</span><br><span class="line">  &quot;registry-mirrors&quot;: [&quot;https://rxtzv2ih.mirror.aliyuncs.com&quot;],</span><br><span class="line">  &quot;exec-opts&quot;: [&quot;native.cgroupdriver=systemd&quot;],</span><br><span class="line">  &quot;log-driver&quot;: &quot;json-file&quot;,</span><br><span class="line">  &quot;log-opts&quot;: &#123;</span><br><span class="line">    &quot;max-size&quot;: &quot;100m&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;storage-driver&quot;: &quot;overlay2&quot;,</span><br><span class="line">  &quot;storage-opts&quot;: [</span><br><span class="line">    &quot;overlay2.override_kernel_check=true&quot;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl restart docker</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="在所有节点上，安装-kubeadm、kubelet-和-kubectl"><a href="#在所有节点上，安装-kubeadm、kubelet-和-kubectl" class="headerlink" title="在所有节点上，安装 kubeadm、kubelet 和 kubectl"></a><strong>在所有节点上，安装 kubeadm、kubelet 和 kubectl</strong></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 配置K8S的yum源</span><br><span class="line"># 这部分用是阿里云的源，如果可以访问Google，则建议用官方的源</span><br><span class="line">cat &lt;&lt;EOF &gt; /etc/yum.repos.d/kubernetes.repo</span><br><span class="line">[kubernetes]</span><br><span class="line">name=Kubernetes</span><br><span class="line">baseurl=http://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=1</span><br><span class="line">repo_gpgcheck=1</span><br><span class="line">gpgkey=http://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg       http://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="在所有节点上修改系统参数"><a href="#在所有节点上修改系统参数" class="headerlink" title="在所有节点上修改系统参数"></a>在所有节点上修改系统参数</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 增加配置</span><br><span class="line">cat &lt;&lt;EOF &gt; /etc/sysctl.d/k8s.conf</span><br><span class="line">net.ipv4.ip_forward=1</span><br><span class="line">net.bridge.bridge-nf-call-ip6tables = 1</span><br><span class="line">net.bridge.bridge-nf-call-iptables = 1</span><br><span class="line">EOF</span><br><span class="line"># 加载</span><br><span class="line">sysctl --system</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="在所有节点上，安装kubeadm、kubelet-和-kubectl"><a href="#在所有节点上，安装kubeadm、kubelet-和-kubectl" class="headerlink" title="在所有节点上，安装kubeadm、kubelet 和 kubectl"></a>在所有节点上，安装kubeadm、kubelet 和 kubectl</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 安装</span><br><span class="line">yum install -y kubelet-1.17.3 kubeadm-1.17.3 kubectl-1.17.3 --disableexcludes=kubernetes</span><br><span class="line"></span><br><span class="line"># 启动并设置 kubelet 开机启动</span><br><span class="line">systemctl start kubelet</span><br><span class="line">systemctl enable --now kubelet</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="在master节点上，初始化集群"><a href="#在master节点上，初始化集群" class="headerlink" title="在master节点上，初始化集群"></a>在master节点上，初始化集群</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubeadm init  --apiserver-advertise-address 0.0.0.0  --apiserver-bind-port 6443 --cert-dir /etc/kubernetes/pki  --control-plane-endpoint k8s-master  --image-repository=&#x27;registry.cn-hangzhou.aliyuncs.com/google_containers&#x27;  --kubernetes-version 1.17.3  --pod-network-cidr 10.10.0.0/16  --service-cidr 10.20.0.0/16  --service-dns-domain cluster.lal  --upload-certs</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="为普通用户添加-kubectl-运行权限"><a href="#为普通用户添加-kubectl-运行权限" class="headerlink" title="为普通用户添加 kubectl 运行权限"></a>为普通用户添加 kubectl 运行权限</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p $HOME/.kube</span><br><span class="line">sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config</span><br><span class="line">sudo chown $(id -u):$(id -g) $HOME/.kube/config</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="安装Calico-网络插件"><a href="#安装Calico-网络插件" class="headerlink" title="安装Calico 网络插件"></a>安装Calico 网络插件</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mkdir calico &amp;&amp; cd calico</span><br><span class="line">wget https://docs.projectcalico.org/v3.8/manifests/calico.yaml</span><br><span class="line"></span><br><span class="line"># 修改配置文件</span><br><span class="line"># 找到 625 行左右的 192.168.0.0/16 ，并修改为我们初始化时配置的 10.10.0.0/16</span><br><span class="line">vim calico.yaml</span><br><span class="line"></span><br><span class="line"># 部署 Pod 网络组件</span><br><span class="line">kubectl apply -f calico.yaml</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="要是遇到了以下这个报错"><a href="#要是遇到了以下这个报错" class="headerlink" title="要是遇到了以下这个报错"></a>要是遇到了以下这个报错</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[kubelet-check] Initial timeout of 40s passed.</span><br><span class="line">error execution phase upload-config/kubelet:</span><br><span class="line">Error writing Crisocket information for the control-plane node: timed out waiting for the condition</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="解决方式"><a href="#解决方式" class="headerlink" title="解决方式"></a>解决方式</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">swapoff -a &amp;&amp; kubeadm reset  &amp;&amp; systemctl daemon-reload &amp;&amp; systemctl restart kubelet  &amp;&amp; iptables -F &amp;&amp; iptables -t nat -F &amp;&amp; iptables -t mangle -F &amp;&amp; iptables -X</span><br></pre></td></tr></table></figure></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:yaohuayaozhihua@outlook.com">姚华</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://hexo.yhblog.biz/2021/03/12/new-page-7/">https://hexo.yhblog.biz/2021/03/12/new-page-7/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://hexo.yhblog.biz" target="_blank">姚华Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/03/12/fedor-new-page-1/"><img class="prev-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">fedora通过nmcli设置桥接网络</div></div></a></div><div class="next-post pull-right"><a href="/2021/03/07/centos7_install_ceph_cluster/"><img class="next-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Centos7搭建ceph cluster</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Centos7%E5%AE%89%E8%A3%85kubernetes%E9%9B%86%E7%BE%A4"><span class="toc-number">1.</span> <span class="toc-text">Centos7安装kubernetes集群</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5%EF%BC%9A"><span class="toc-number">1.1.</span> <span class="toc-text">参考链接：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9B%86%E7%BE%A4%E4%BF%A1%E6%81%AF"><span class="toc-number">1.2.</span> <span class="toc-text">集群信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.3.</span> <span class="toc-text">安装步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E4%B8%8A%EF%BC%8C%E7%A6%81%E7%94%A8selinux"><span class="toc-number">1.3.1.</span> <span class="toc-text">在所有节点上，禁用selinux</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E4%B8%8A%EF%BC%8C%E7%A6%81%E7%94%A8%E5%85%B3%E9%97%ADfirewalld"><span class="toc-number">1.3.2.</span> <span class="toc-text">在所有节点上，禁用关闭firewalld</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E4%B8%8A%EF%BC%8C%E5%85%B3%E9%97%ADswap"><span class="toc-number">1.3.3.</span> <span class="toc-text">在所有节点上，关闭swap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E6%94%B9%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E4%B8%8A%E7%9A%84%E6%BA%90%E4%B8%BA%E5%9B%BD%E5%86%85%E9%98%BF%E9%87%8C%E6%BA%90"><span class="toc-number">1.3.4.</span> <span class="toc-text">更改所有节点上的源为国内阿里源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E6%89%80%E6%9C%89%E7%9A%84%E8%8A%82%E7%82%B9%E4%B8%8A%E5%AE%89%E8%A3%85docker"><span class="toc-number">1.3.5.</span> <span class="toc-text">在所有的节点上安装docker</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E4%B8%8A%EF%BC%8C%E4%BF%AE%E6%94%B9Cgroup-Driver"><span class="toc-number">1.3.6.</span> <span class="toc-text">在所有节点上，修改Cgroup Driver</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E4%B8%8A%EF%BC%8C%E5%AE%89%E8%A3%85-kubeadm%E3%80%81kubelet-%E5%92%8C-kubectl"><span class="toc-number">1.3.7.</span> <span class="toc-text">在所有节点上，安装 kubeadm、kubelet 和 kubectl</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E4%B8%8A%E4%BF%AE%E6%94%B9%E7%B3%BB%E7%BB%9F%E5%8F%82%E6%95%B0"><span class="toc-number">1.3.8.</span> <span class="toc-text">在所有节点上修改系统参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E4%B8%8A%EF%BC%8C%E5%AE%89%E8%A3%85kubeadm%E3%80%81kubelet-%E5%92%8C-kubectl"><span class="toc-number">1.3.9.</span> <span class="toc-text">在所有节点上，安装kubeadm、kubelet 和 kubectl</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8master%E8%8A%82%E7%82%B9%E4%B8%8A%EF%BC%8C%E5%88%9D%E5%A7%8B%E5%8C%96%E9%9B%86%E7%BE%A4"><span class="toc-number">1.3.10.</span> <span class="toc-text">在master节点上，初始化集群</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E6%99%AE%E9%80%9A%E7%94%A8%E6%88%B7%E6%B7%BB%E5%8A%A0-kubectl-%E8%BF%90%E8%A1%8C%E6%9D%83%E9%99%90"><span class="toc-number">1.3.11.</span> <span class="toc-text">为普通用户添加 kubectl 运行权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Calico-%E7%BD%91%E7%BB%9C%E6%8F%92%E4%BB%B6"><span class="toc-number">1.3.12.</span> <span class="toc-text">安装Calico 网络插件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A6%81%E6%98%AF%E9%81%87%E5%88%B0%E4%BA%86%E4%BB%A5%E4%B8%8B%E8%BF%99%E4%B8%AA%E6%8A%A5%E9%94%99"><span class="toc-number">1.3.13.</span> <span class="toc-text">要是遇到了以下这个报错</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E5%BC%8F"><span class="toc-number">1.3.13.1.</span> <span class="toc-text">解决方式</span></a></li></ol></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By 姚华</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

@@ -1,0 +1,249 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Centos7搭建ceph cluster | 姚华Blog</title><meta name="keywords" content="运维"><meta name="author" content="姚华,yaohuayaozhihua@outlook.com"><meta name="copyright" content="姚华"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Centos7搭建ceph cluster集群节点123456# ceph node192.168.31.150        ceph-control192.168.31.151        mon1192.168.31.152        osd1192.168.31.153        osd2192.168.31.154        client    操作步骤在所有节点上添加ho">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Centos7搭建ceph cluster">
+<meta property="og:url" content="https://hexo.yhblog.biz/2021/03/07/centos7_install_ceph_cluster/index.html">
+<meta property="og:site_name" content="姚华Blog">
+<meta property="og:description" content="Centos7搭建ceph cluster集群节点123456# ceph node192.168.31.150        ceph-control192.168.31.151        mon1192.168.31.152        osd1192.168.31.153        osd2192.168.31.154        client    操作步骤在所有节点上添加ho">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg">
+<meta property="article:published_time" content="2021-03-07T05:10:00.724Z">
+<meta property="article:modified_time" content="2021-07-23T02:32:05.000Z">
+<meta property="article:author" content="姚华">
+<meta property="article:tag" content="运维">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://hexo.yhblog.biz/2021/03/07/centos7_install_ceph_cluster/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Centos7搭建ceph cluster',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: true,
+  isToc: true,
+  postUpdate: '2021-07-23 10:32:05'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">30</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">姚华Blog</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Centos7搭建ceph cluster</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-03-07T05:10:00.724Z" title="发表于 2021-03-07 13:10:00">2021-03-07</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-07-23T02:32:05.000Z" title="更新于 2021-07-23 10:32:05">2021-07-23</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Centos7搭建ceph cluster"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Centos7搭建ceph-cluster"><a href="#Centos7搭建ceph-cluster" class="headerlink" title="Centos7搭建ceph cluster"></a>Centos7搭建ceph cluster</h1><h4 id="集群节点"><a href="#集群节点" class="headerlink" title="集群节点"></a><strong>集群节点</strong></h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># ceph node</span><br><span class="line">192.168.31.150        ceph-control</span><br><span class="line">192.168.31.151        mon1</span><br><span class="line">192.168.31.152        osd1</span><br><span class="line">192.168.31.153        osd2</span><br><span class="line">192.168.31.154        client</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="操作步骤"><a href="#操作步骤" class="headerlink" title="操作步骤"></a><strong>操作步骤</strong></h4><p>在所有节点上添加hosts信息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">dat &gt;&gt; /etc/hosts &lt;&lt; EOF</span><br><span class="line"># ceph node</span><br><span class="line">192.168.31.150        ceph-control</span><br><span class="line">192.168.31.151        mon1</span><br><span class="line">192.168.31.152        osd1</span><br><span class="line">192.168.31.153        osd2</span><br><span class="line">192.168.31.154        client</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+
+
+
+<p>安装ntp服务</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yum install ntp ntpdate ntp-doc -y</span><br><span class="line">ntpdate ntp.aliyun.com</span><br><span class="line">systemctl start ntpd</span><br><span class="line">systemctl enable ntpd</span><br></pre></td></tr></table></figure>
+
+
+
+<p>添加用户</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">useradd ceph &amp;&amp; echo &quot;ceph&quot; | passwd --stdin ceph</span><br><span class="line">echo &quot;ceph ALL = (root) NOPASSWD:ALL&quot; | sudo tee /etc/sudoers.d/ceph</span><br><span class="line">chmod 0440 /etc/sudoers.d/ceph</span><br></pre></td></tr></table></figure>
+
+
+
+<p>设置ssh密钥登陆</p>
+<p>在ceph-control执行<code>ssh-keygen</code>以生成密钥，需要用ceph用户执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ssh-copy-id ceph@mon1</span><br><span class="line">ssh-copy-id ceph@osd1</span><br><span class="line">ssh-copy-id ceph@osd2</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">cat &gt;&gt; ~/.ssh/config &lt;&lt; EOF</span><br><span class="line">Host osd1</span><br><span class="line">   Hostname osd1</span><br><span class="line">   User ceph</span><br><span class="line">Host osd2</span><br><span class="line">   Hostname osd2</span><br><span class="line">   User ceph</span><br><span class="line">Host mon1</span><br><span class="line">   Hostname mon1</span><br><span class="line">   User ceph</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod 644 ~/.ssh/config</span><br></pre></td></tr></table></figure>
+
+
+
+<p>设置防火墙规则</p>
+<ul>
+<li>ceph-control上设置防火墙规则</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo firewall-cmd --zone=public --add-port=80/tcp --permanent</span><br><span class="line">sudo firewall-cmd --zone=public --add-port=2003/tcp --permanent</span><br><span class="line">sudo firewall-cmd --zone=public --add-port=4505-4506/tcp --permanent</span><br><span class="line">sudo firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>osd1和osd2上都设置这两条规则</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo firewall-cmd --zone=public --add-port=6800-7300/tcp --permanent</span><br><span class="line">sudo firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>mon1上设置</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo firewall-cmd --zone=public --add-port=6789/tcp --permanent</span><br><span class="line">sudo firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+
+
+
+<p>在ceph-control上安装及配置ceph cluster</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo rpm -Uvh https://download.ceph.com/rpm-mimic/el7/noarch/ceph-release-1-1.el7.noarch.rpm</span><br><span class="line">sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm</span><br><span class="line">sudo yum update -y &amp;&amp; sudo yum install ceph-deploy python2-pip -y</span><br></pre></td></tr></table></figure>
+
+
+
+<p>创建一个”ceph_cluster”，这个目录拥有所有cluster配置</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir ceph_cluster</span><br><span class="line">cd ceph_cluster</span><br><span class="line">ceph-deploy new mon1</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cat &gt;&gt; ceph.conf &lt;&lt; EOF</span><br><span class="line">public network = 192.168.31.0/24</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ceph-deploy install ceph-control osd1 osd2 mon1</span><br><span class="line">cd ceph_cluster/</span><br><span class="line">ceph-deploy mon create-initial</span><br><span class="line">ceph-deploy mgr create osd1 osd2 mon1</span><br></pre></td></tr></table></figure>
+
+
+
+<p>排错</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[ceph@ceph-control root]$ ceph health</span><br><span class="line">2020-05-24 07:59:56.615 7fccb89fe700 -1 auth: unable to find a keyring on /etc/ceph/ceph.client.admin.keyring,/etc/ceph/ceph.keyring,/etc/ceph/keyring ,/etc/ceph/keyring.bin,: (2) No such file or directory</span><br><span class="line">2020-05-24 07:59:56.615 7fccb89fe700 -1 monclient: ERROR: missing keyring, cannot use cephx for authentication</span><br><span class="line">[errno 2] error connecting to the cluster</span><br><span class="line">[ceph@ceph-control root]$ ceph health</span><br><span class="line">2020-05-24 07:59:58.538 7f02619da700 -1 auth: unable to find a keyring on /etc/ceph/ceph.client.admin.keyring,/etc/ceph/ceph.keyring,/etc/ceph/keyring ,/etc/ceph/keyring.bin,: (2) No such file or directory</span><br><span class="line">2020-05-24 07:59:58.538 7f02619da700 -1 monclient: ERROR: missing keyring, cannot use cephx for authentication</span><br><span class="line">[errno 2] error connecting to the cluster</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>查看ceph状态有这个报错</li>
+<li>解决方法</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo cp -a /home/ceph/ceph_cluster/ceph.client.admin.keyring /etc/ceph/</span><br><span class="line">sudo chmod +r /etc/ceph/ceph.client.admin.keyring</span><br></pre></td></tr></table></figure>
+<h2 id="CRUSH算法"><a href="#CRUSH算法" class="headerlink" title="CRUSH算法"></a>CRUSH算法</h2><p>CRUSH(controlled Replication Under Scalable Hashing)算法取代了在元数据表中为每个客户端请求进行查找，它计算系统中数据应该被写入或读出的位置。通过计算元数据，这样就不需要再管理元数据。CRUSH算法使ceph实现了自我管理和自我修复。在一个故障域内某组件发生故障时，CRUSH能感知到到是哪个组件除了故障，并判断该故障对集群的影响，在没有任何管理干预情况下，CRUSH自我管理并通过恢复因故障丢失的数据而自愈。</p>
+<h2 id="ceph架构"><a href="#ceph架构" class="headerlink" title="ceph架构"></a>ceph架构</h2><p><img src="https://yhblog-1254039996.cos.ap-guangzhou.myqcloud.com/img-blog/420px-Ceph_stack.png" alt="Ceph (software) - Wikipedia"></p>
+<ul>
+<li>MDS: 只为CephFS文件系统跟踪文件的层次结构和存储元数据。而Ceph块存储和RADOS并不需要元数据，因此不需要MDS。</li>
+<li>RADOS: RADOS是Ceph存储集群的基础。在Ceph中，所有数据都以对象形式存储，并且无论是哪种数据类型，RADOS对象存储都将负责保存这些对象。</li>
+<li>librados: 原生接口</li>
+<li>RBD: ceph块存储</li>
+<li>RGW: 提供对象存储服务，使用librgw和librados，允许应用程序与ceph对象存储建立连接，RGW提供了与Amazon S3和openstack swift兼容的restful api</li>
+<li>CephFS: 文件存储服务</li>
+</ul>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://www.linuxtechi.com/install-configure-ceph-cluster-centos-7/">https://www.linuxtechi.com/install-configure-ceph-cluster-centos-7/</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.xuxiaopang.com/2017/08/23/easy-ceph-CephX/">http://www.xuxiaopang.com/2017/08/23/easy-ceph-CephX/</a></li>
+<li><a target="_blank" rel="noopener" href="http://blog.itpub.net/25854343/viewspace-2642445/">http://blog.itpub.net/25854343/viewspace-2642445/</a></li>
+<li><a target="_blank" rel="noopener" href="https://topic.alibabacloud.com/a/installing-a-ceph-storage-cluster-under-centos-7_1_18_31055180.html">https://topic.alibabacloud.com/a/installing-a-ceph-storage-cluster-under-centos-7_1_18_31055180.html</a></li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:yaohuayaozhihua@outlook.com">姚华</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://hexo.yhblog.biz/2021/03/07/centos7_install_ceph_cluster/">https://hexo.yhblog.biz/2021/03/07/centos7_install_ceph_cluster/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://hexo.yhblog.biz" target="_blank">姚华Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/03/12/new-page-7/"><img class="prev-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Centos7安装kubernetes集群</div></div></a></div><div class="next-post pull-right"><a href="/2021/03/06/centos7_install_tomcat9/"><img class="next-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Centos7安装tomcat9</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Centos7%E6%90%AD%E5%BB%BAceph-cluster"><span class="toc-number">1.</span> <span class="toc-text">Centos7搭建ceph cluster</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9B%86%E7%BE%A4%E8%8A%82%E7%82%B9"><span class="toc-number">1.0.0.1.</span> <span class="toc-text">集群节点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.0.0.2.</span> <span class="toc-text">操作步骤</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CRUSH%E7%AE%97%E6%B3%95"><span class="toc-number">1.1.</span> <span class="toc-text">CRUSH算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ceph%E6%9E%B6%E6%9E%84"><span class="toc-number">1.2.</span> <span class="toc-text">ceph架构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="toc-number">1.3.</span> <span class="toc-text">参考链接</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By 姚华</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
